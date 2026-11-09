@@ -16,6 +16,11 @@ const DATA_CSV_URL  = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR2TrlLlS
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bai+Jamjuree:wght@500;600;700&family=IBM+Plex+Sans+Thai:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
+<style>/* Leaflet 1.9.4 */ .leaflet-pane, .leaflet-tile, .leaflet-marker-icon, .leaflet-marker-shadow, .leaflet-tile-container, .leaflet-pane > svg, .leaflet-pane > canvas, .leaflet-zoom-box, .leaflet-image-layer, .leaflet-layer { position: absolute; left: 0; top: 0; } .leaflet-container { overflow: hidden; } .leaflet-tile, .leaflet-marker-icon, .leaflet-marker-shadow { -webkit-user-select: none; -moz-user-select: none; user-select: none; -webkit-user-drag: none; } .leaflet-tile::selection { background: transparent; } .leaflet-safari .leaflet-tile { image-rendering: -webkit-optimize-contrast; } .leaflet-safari .leaflet-tile-container { width: 1600px; height: 1600px; -webkit-transform-origin: 0 0; } .leaflet-marker-icon, .leaflet-marker-shadow { display: block; } .leaflet-container .leaflet-overlay-pane svg { max-width: none !important; max-height: none !important; } .leaflet-container .leaflet-marker-pane img, .leaflet-container .leaflet-shadow-pane img, .leaflet-container .leaflet-tile-pane img, .leaflet-container img.leaflet-image-layer, .leaflet-container .leaflet-tile { max-width: none !important; max-height: none !important; width: auto; padding: 0; } .leaflet-container img.leaflet-tile { mix-blend-mode: plus-lighter; } .leaflet-container.leaflet-touch-zoom { -ms-touch-action: pan-x pan-y; touch-action: pan-x pan-y; } .leaflet-container.leaflet-touch-drag { -ms-touch-action: pinch-zoom; touch-action: none; touch-action: pinch-zoom; } .leaflet-container.leaflet-touch-drag.leaflet-touch-zoom { -ms-touch-action: none; touch-action: none; } .leaflet-container { -webkit-tap-highlight-color: transparent; } .leaflet-container a { -webkit-tap-highlight-color: rgba(51, 181, 229, 0.4); } .leaflet-tile { filter: inherit; visibility: hidden; } .leaflet-tile-loaded { visibility: inherit; } .leaflet-zoom-box { width: 0; height: 0; -moz-box-sizing: border-box; box-sizing: border-box; z-index: 800; } .leaflet-overlay-pane svg { -moz-user-select: none; } .leaflet-pane { z-index: 400; } .leaflet-tile-pane { z-index: 200; } .leaflet-overlay-pane { z-index: 400; } .leaflet-shadow-pane { z-index: 500; } .leaflet-marker-pane { z-index: 600; } .leaflet-tooltip-pane { z-index: 650; } .leaflet-popup-pane { z-index: 700; } .leaflet-map-pane canvas { z-index: 100; } .leaflet-map-pane svg { z-index: 200; } .leaflet-vml-shape { width: 1px; height: 1px; } .leaflet-control { position: relative; z-index: 800; pointer-events: visiblePainted; pointer-events: auto; } .leaflet-top, .leaflet-bottom { position: absolute; z-index: 1000; pointer-events: none; } .leaflet-top { top: 0; } .leaflet-right { right: 0; } .leaflet-bottom { bottom: 0; } .leaflet-left { left: 0; } .leaflet-control { float: left; clear: both; } .leaflet-right .leaflet-control { float: right; } .leaflet-top .leaflet-control { margin-top: 10px; } .leaflet-bottom .leaflet-control { margin-bottom: 10px; } .leaflet-left .leaflet-control { margin-left: 10px; } .leaflet-right .leaflet-control { margin-right: 10px; } .leaflet-fade-anim .leaflet-popup { opacity: 0; -webkit-transition: opacity 0.2s linear; -moz-transition: opacity 0.2s linear; transition: opacity 0.2s linear; } .leaflet-fade-anim .leaflet-map-pane .leaflet-popup { opacity: 1; } .leaflet-zoom-animated { -webkit-transform-origin: 0 0; -ms-transform-origin: 0 0; transform-origin: 0 0; } svg.leaflet-zoom-animated { will-change: transform; } .leaflet-zoom-anim .leaflet-zoom-animated { -webkit-transition: -webkit-transform 0.25s cubic-bezier(0,0,0.25,1); -moz-transition: -moz-transform 0.25s cubic-bezier(0,0,0.25,1); transition: transform 0.25s cubic-bezier(0,0,0.25,1); } .leaflet-zoom-anim .leaflet-tile, .leaflet-pan-anim .leaflet-tile { -webkit-transition: none; -moz-transition: none; transition: none; } .leaflet-zoom-anim .leaflet-zoom-hide { visibility: hidden; } .leaflet-interactive { cursor: pointer; } .leaflet-grab { cursor: -webkit-grab; cursor: -moz-grab; cursor: grab; } .leaflet-crosshair, .leaflet-crosshair .leaflet-interactive { cursor: crosshair; } .leaflet-popup-pane, .leaflet-control { cursor: auto; } .leaflet-dragging .leaflet-grab, .leaflet-dragging .leaflet-grab .leaflet-interactive, .leaflet-dragging .leaflet-marker-draggable { cursor: move; cursor: -webkit-grabbing; cursor: -moz-grabbing; cursor: grabbing; } .leaflet-marker-icon, .leaflet-marker-shadow, .leaflet-image-layer, .leaflet-pane > svg path, .leaflet-tile-container { pointer-events: none; } .leaflet-marker-icon.leaflet-interactive, .leaflet-image-layer.leaflet-interactive, .leaflet-pane > svg path.leaflet-interactive, svg.leaflet-image-layer.leaflet-interactive path { pointer-events: visiblePainted; pointer-events: auto; } .leaflet-container { background: #ddd; outline-offset: 1px; } .leaflet-container a { color: #0078A8; } .leaflet-zoom-box { border: 2px dotted #38f; background: rgba(255,255,255,0.5); } .leaflet-container { font-family: "Helvetica Neue", Arial, Helvetica, sans-serif; font-size: 12px; font-size: 0.75rem; line-height: 1.5; } .leaflet-bar { box-shadow: 0 1px 5px rgba(0,0,0,0.65); border-radius: 4px; } .leaflet-bar a { background-color: #fff; border-bottom: 1px solid #ccc; width: 26px; height: 26px; line-height: 26px; display: block; text-align: center; text-decoration: none; color: black; } .leaflet-bar a, .leaflet-control-layers-toggle { background-position: 50% 50%; background-repeat: no-repeat; display: block; } .leaflet-bar a:hover, .leaflet-bar a:focus { background-color: #f4f4f4; } .leaflet-bar a:first-child { border-top-left-radius: 4px; border-top-right-radius: 4px; } .leaflet-bar a:last-child { border-bottom-left-radius: 4px; border-bottom-right-radius: 4px; border-bottom: none; } .leaflet-bar a.leaflet-disabled { cursor: default; background-color: #f4f4f4; color: #bbb; } .leaflet-touch .leaflet-bar a { width: 30px; height: 30px; line-height: 30px; } .leaflet-touch .leaflet-bar a:first-child { border-top-left-radius: 2px; border-top-right-radius: 2px; } .leaflet-touch .leaflet-bar a:last-child { border-bottom-left-radius: 2px; border-bottom-right-radius: 2px; } .leaflet-control-zoom-in, .leaflet-control-zoom-out { font: bold 18px 'Lucida Console', Monaco, monospace; text-indent: 1px; } .leaflet-touch .leaflet-control-zoom-in, .leaflet-touch .leaflet-control-zoom-out { font-size: 22px; } .leaflet-control-layers { box-shadow: 0 1px 5px rgba(0,0,0,0.4); background: #fff; border-radius: 5px; } .leaflet-touch .leaflet-control-layers-toggle { width: 44px; height: 44px; } .leaflet-control-layers .leaflet-control-layers-list, .leaflet-control-layers-expanded .leaflet-control-layers-toggle { display: none; } .leaflet-control-layers-expanded .leaflet-control-layers-list { display: block; position: relative; } .leaflet-control-layers-expanded { padding: 6px 10px 6px 6px; color: #333; background: #fff; } .leaflet-control-layers-scrollbar { overflow-y: scroll; overflow-x: hidden; padding-right: 5px; } .leaflet-control-layers-selector { margin-top: 2px; position: relative; top: 1px; } .leaflet-control-layers label { display: block; font-size: 13px; font-size: 1.08333em; } .leaflet-control-layers-separator { height: 0; border-top: 1px solid #ddd; margin: 5px -10px 5px -6px; } .leaflet-container .leaflet-control-attribution { background: #fff; background: rgba(255, 255, 255, 0.8); margin: 0; } .leaflet-control-attribution, .leaflet-control-scale-line { padding: 0 5px; color: #333; line-height: 1.4; } .leaflet-control-attribution a { text-decoration: none; } .leaflet-control-attribution a:hover, .leaflet-control-attribution a:focus { text-decoration: underline; } .leaflet-attribution-flag { display: inline !important; vertical-align: baseline !important; width: 1em; height: 0.6669em; } .leaflet-left .leaflet-control-scale { margin-left: 5px; } .leaflet-bottom .leaflet-control-scale { margin-bottom: 5px; } .leaflet-control-scale-line { border: 2px solid #777; border-top: none; line-height: 1.1; padding: 2px 5px 1px; white-space: nowrap; -moz-box-sizing: border-box; box-sizing: border-box; background: rgba(255, 255, 255, 0.8); text-shadow: 1px 1px #fff; } .leaflet-control-scale-line:not(:first-child) { border-top: 2px solid #777; border-bottom: none; margin-top: -2px; } .leaflet-control-scale-line:not(:first-child):not(:last-child) { border-bottom: 2px solid #777; } .leaflet-touch .leaflet-control-attribution, .leaflet-touch .leaflet-control-layers, .leaflet-touch .leaflet-bar { box-shadow: none; } .leaflet-touch .leaflet-control-layers, .leaflet-touch .leaflet-bar { border: 2px solid rgba(0,0,0,0.2); background-clip: padding-box; } .leaflet-popup { position: absolute; text-align: center; margin-bottom: 20px; } .leaflet-popup-content-wrapper { padding: 1px; text-align: left; border-radius: 12px; } .leaflet-popup-content { margin: 13px 24px 13px 20px; line-height: 1.3; font-size: 13px; font-size: 1.08333em; min-height: 1px; } .leaflet-popup-content p { margin: 17px 0; margin: 1.3em 0; } .leaflet-popup-tip-container { width: 40px; height: 20px; position: absolute; left: 50%; margin-top: -1px; margin-left: -20px; overflow: hidden; pointer-events: none; } .leaflet-popup-tip { width: 17px; height: 17px; padding: 1px; margin: -10px auto 0; pointer-events: auto; -webkit-transform: rotate(45deg); -moz-transform: rotate(45deg); -ms-transform: rotate(45deg); transform: rotate(45deg); } .leaflet-popup-content-wrapper, .leaflet-popup-tip { background: white; color: #333; box-shadow: 0 3px 14px rgba(0,0,0,0.4); } .leaflet-container a.leaflet-popup-close-button { position: absolute; top: 0; right: 0; border: none; text-align: center; width: 24px; height: 24px; font: 16px/24px Tahoma, Verdana, sans-serif; color: #757575; text-decoration: none; background: transparent; } .leaflet-container a.leaflet-popup-close-button:hover, .leaflet-container a.leaflet-popup-close-button:focus { color: #585858; } .leaflet-popup-scrolled { overflow: auto; } .leaflet-oldie .leaflet-popup-content-wrapper { -ms-zoom: 1; } .leaflet-oldie .leaflet-popup-tip { width: 24px; margin: 0 auto; -ms-filter: "progid:DXImageTransform.Microsoft.Matrix(M11=0.70710678, M12=0.70710678, M21=-0.70710678, M22=0.70710678)"; filter: progid:DXImageTransform.Microsoft.Matrix(M11=0.70710678, M12=0.70710678, M21=-0.70710678, M22=0.70710678); } .leaflet-oldie .leaflet-control-zoom, .leaflet-oldie .leaflet-control-layers, .leaflet-oldie .leaflet-popup-content-wrapper, .leaflet-oldie .leaflet-popup-tip { border: 1px solid #999; } .leaflet-div-icon { background: #fff; border: 1px solid #666; } .leaflet-tooltip { position: absolute; padding: 6px; background-color: #fff; border: 1px solid #fff; border-radius: 3px; color: #222; white-space: nowrap; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; pointer-events: none; box-shadow: 0 1px 3px rgba(0,0,0,0.4); } .leaflet-tooltip.leaflet-interactive { cursor: pointer; pointer-events: auto; } .leaflet-tooltip-top:before, .leaflet-tooltip-bottom:before, .leaflet-tooltip-left:before, .leaflet-tooltip-right:before { position: absolute; pointer-events: none; border: 6px solid transparent; background: transparent; content: ""; } .leaflet-tooltip-bottom { margin-top: 6px; } .leaflet-tooltip-top { margin-top: -6px; } .leaflet-tooltip-bottom:before, .leaflet-tooltip-top:before { left: 50%; margin-left: -6px; } .leaflet-tooltip-top:before { bottom: 0; margin-bottom: -12px; border-top-color: #fff; } .leaflet-tooltip-bottom:before { top: 0; margin-top: -12px; margin-left: -6px; border-bottom-color: #fff; } .leaflet-tooltip-left { margin-left: -6px; } .leaflet-tooltip-right { margin-left: 6px; } .leaflet-tooltip-left:before, .leaflet-tooltip-right:before { top: 50%; margin-top: -6px; } .leaflet-tooltip-left:before { right: 0; margin-right: -12px; border-left-color: #fff; } .leaflet-tooltip-right:before { left: 0; margin-left: -12px; border-right-color: #fff; } @media print { .leaflet-control { -webkit-print-color-adjust: exact; print-color-adjust: exact; } } </style>
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}[hidden]{display:none!important}img{max-width:100%}</style>
+</head>
+<body>
 <style>
 /* Layout: control bar → summary band (KPIs, trend, tables) → map workbench with side panel for detail / route */
 :root{
@@ -86,11 +91,19 @@ details ul{margin:8px 0 0;padding-left:18px;max-height:220px;overflow:auto;font-
 .work{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:16px;align-items:start}
 @media (max-width:900px){.work{grid-template-columns:minmax(0,1fr)}}
 .mapbox{position:relative;border:1px solid var(--line);border-radius:10px;background:var(--panel);overflow:hidden;touch-action:none}
-#map{display:block;width:100%;height:min(68vh,620px);cursor:grab}
-#map.drag{cursor:grabbing}
-.mapctl{position:absolute;right:10px;top:10px;display:grid;gap:4px}
+#map{display:block;width:100%;height:min(68vh,620px)}
+.leaflet-container{font-family:var(--f-body);background:var(--soft)}
+.leaflet-tooltip{background:var(--panel);color:var(--ink);border-color:var(--line);font-size:12px}
+.zlbl{background:transparent!important;border:0!important;box-shadow:none!important;padding:0;font-family:var(--f-display);font-weight:600;font-size:12px;color:var(--accent)!important;text-shadow:0 0 3px var(--panel),0 0 3px var(--panel),0 0 2px var(--panel)}
+.zlbl::before{display:none}
+.zlbl.sel{font-size:14px}
+.stopnum span{display:grid;place-items:center;width:22px;height:22px;border-radius:50%;color:#fff;font:600 11px var(--f-mono);border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.35)}
+.tilenote{position:absolute;left:10px;right:56px;top:10px;z-index:1000;background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:6px 10px;font-size:12px;color:var(--muted)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .leaflet-tile-pane{filter:invert(1) hue-rotate(180deg) brightness(.85) contrast(.9)}}
+:root[data-theme="dark"] .leaflet-tile-pane{filter:invert(1) hue-rotate(180deg) brightness(.85) contrast(.9)}
+.mapctl{position:absolute;right:10px;top:10px;display:grid;gap:4px;z-index:1000}
 .mapctl button{width:34px;height:34px;padding:0;font-size:16px;line-height:1}
-.maphint{position:absolute;left:10px;bottom:8px;font-size:11px;color:var(--muted);background:var(--panel);padding:2px 6px;border-radius:4px;opacity:.9}
+.maphint{position:absolute;left:10px;bottom:8px;z-index:1000;font-size:11px;color:var(--muted);background:var(--panel);padding:2px 6px;border-radius:4px;opacity:.9}
 .side{display:grid;gap:12px;min-width:0}
 .side .panel{max-height:620px;overflow:auto}
 .kv{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;font-size:13px}
@@ -122,9 +135,6 @@ td.x{color:var(--bad);font-weight:600}
 .src button{padding:2px 10px;font-size:12px}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
-<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}[hidden]{display:none!important}img{max-width:100%}</style>
-</head>
-<body>
 
 <div class="wrap">
   <header>
@@ -180,7 +190,8 @@ td.x{color:var(--bad);font-weight:600}
     </div>
     <div class="work">
       <div class="mapbox">
-        <svg id="map" role="img" aria-label="แผนที่จุดเก็บ"></svg>
+        <div id="map" role="region" aria-label="แผนที่จุดเก็บ"></div>
+        <div class="tilenote" id="tileNote" hidden>โหลดภาพแผนที่ OpenStreetMap ไม่ได้ในหน้านี้ (เครือข่ายหรือหน้าเว็บนี้ปิดกั้น) จุดและเขตสาขายังใช้งานได้ตามปกติ</div>
         <div class="mapctl"><button id="zin" aria-label="ซูมเข้า">+</button><button id="zout" aria-label="ซูมออก">−</button><button id="zfit" aria-label="พอดีจอ">⤢</button></div>
         <div class="maphint">ลากเพื่อเลื่อน · ล้อเมาส์/ปุ่ม +− เพื่อซูม · คลิกในเขตสาขาเพื่อกรอง</div>
       </div>
@@ -404,79 +415,55 @@ function quality(){
 $('qAttn').onclick=e=>{const a=e.target.closest('[data-i]');if(!a)return;e.preventDefault();if(S.mode!=='quality'){S.mode='quality';[...$('modeSeg').children].forEach(b=>b.setAttribute('aria-pressed',b.dataset.m==='quality'))}selectPt(+a.dataset.i,true)};
 $('tQ').onclick=e=>{const tr=e.target.closest('tr[data-k]');if(!tr)return;S.br=S.br===tr.dataset.k?'all':tr.dataset.k;$('fBr').value=S.br;render()};
 
-/* ---------- map ---------- */
-const svg=$('map');
-const LAT0=13.75,KX=Math.cos(LAT0*Math.PI/180);
-const px=d=>[(d.lng-100.6)*KX*1000,-(d.lat-LAT0)*1000];
-const LANDMARKS=[['อนุสาวรีย์ชัยฯ',13.7649,100.5383],['สนามบินสุวรรณภูมิ',13.690,100.750],['สนามบินดอนเมือง',13.9126,100.6068],['สยาม',13.7456,100.5341],['ศาลากลางนนทบุรี',13.861,100.514],['มีนบุรี',13.8136,100.7316],['บางแค',13.7106,100.4087],['สมุทรปราการ',13.599,100.597],['รามคำแหง',13.7557,100.6185],['บางนา',13.668,100.605],['ตลิ่งชัน',13.777,100.456],['จตุจักร',13.8027,100.5536]];
-let view={x:0,y:0,k:1},base=null;
-const geo=D.filter(d=>d.lat!=null);
-function fitBox(pts){const xs=pts.map(d=>px(d)[0]).sort((a,b)=>a-b),ys=pts.map(d=>px(d)[1]).sort((a,b)=>a-b);
-  const q=(a,f)=>a[Math.min(a.length-1,Math.max(0,Math.round(f*(a.length-1))))];
-  const lo=pts.length>20?.02:0,hi=1-lo;return [q(xs,lo),q(ys,lo),q(xs,hi),q(ys,hi)]}
-function fitBox0(pts){const P=pts.map(px);return [Math.min(...P.map(p=>p[0])),Math.min(...P.map(p=>p[1])),Math.max(...P.map(p=>p[0])),Math.max(...P.map(p=>p[1]))]}
-function sizeBase(box){const r=svg.getBoundingClientRect(),W=r.width||800,H=r.height||600,pad=56;
-  const [x0,y0,x1,y1]=box,k=Math.min((W-2*pad)/Math.max(x1-x0,1),(H-2*pad)/Math.max(y1-y0,1));
-  return {k,x:W/2-k*(x0+x1)/2,y:H/2-k*(y0+y1)/2,W,H}}
-const MWAPTS=MWA.flatMap(m=>m.rings.flat().map(([lng,lat])=>({lat,lng})));
-function fit(pts){base=sizeBase(pts&&pts.length?fitBox(pts):fitBox0(MWAPTS));view={x:base.x,y:base.y,k:base.k};drawMap()}
-const tx=d=>{const [a,b]=px(d);return [a*view.k+view.x,b*view.k+view.y]};
+/* ---------- map (Leaflet + OpenStreetMap) ---------- */
+const cv=v=>{const m=String(v).match(/^var\((--[\w-]+)\)$/);return m?getComputedStyle(document.documentElement).getPropertyValue(m[1]).trim():v};
+const map=L.map('map',{zoomControl:false,preferCanvas:false}).setView([13.75,100.6],10);
+const tiles=L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors'}).addTo(map);
+let tileErr=0,tileOk=0;
+tiles.on('tileerror',()=>{tileErr++;if(tileErr>=3&&!tileOk)$('tileNote').hidden=false});
+tiles.on('tileload',()=>{tileOk++;$('tileNote').hidden=true});
+map.createPane('zones');map.getPane('zones').style.zIndex=350;
+const zoneLayer=L.layerGroup().addTo(map),dotLayer=L.layerGroup().addTo(map);
+const MWAB=L.latLngBounds(MWA.flatMap(m=>m.rings.flat().map(([lng,lat])=>[lat,lng])));
+function fit(pts){const b=pts&&pts.length?L.latLngBounds(pts.filter(d=>d.lat!=null).map(d=>[d.lat,d.lng])):MWAB;if(b.isValid())map.fitBounds(b,{padding:[30,30],maxZoom:16})}
 function drawMap(){
-  if(!base){fit();return}
-  const r=svg.getBoundingClientRect();svg.setAttribute('viewBox',`0 0 ${r.width||800} ${r.height||600}`);
-  let s='';
-  // graticule every 0.05°
-  const W=r.width,H=r.height;
-  for(let lat=13.4;lat<=14.1;lat+=0.05){const y=tx({lat,lng:100.6})[1];if(y<0||y>H)continue;s+=`<line x1="0" x2="${W}" y1="${y}" y2="${y}" stroke="var(--soft)"/><text x="4" y="${y-3}" style="font-size:9px">${lat.toFixed(2)}°N</text>`}
-  for(let lng=100.2;lng<=101.4;lng+=0.05){const x=tx({lat:LAT0,lng})[0];if(x<0||x>W)continue;s+=`<line y1="0" y2="${H}" x1="${x}" x2="${x}" stroke="var(--soft)"/><text x="${x+3}" y="${H-22}" style="font-size:9px">${lng.toFixed(2)}°E</text>`}
-  if(S.layer!=='off'){const y=S.year;
+  zoneLayer.clearLayers();dotLayer.clearLayers();
+  const acc=cv('var(--accent)'),panel=cv('var(--panel)'),y=S.year;
+  if(S.layer!=='off'){
     const rates={};brs.forEach(b=>{const a=D.filter(d=>d.br===b&&(S.who==='all'||d.who===S.who)),c=cnt(a,y),r=c['เก็บ']+c['เสีย'];rates[b]=r?c['เก็บ']/r:null});
-    let lbl='';
-    MWA.forEach(m=>{const code=N2C[m.name],sel=S.br===code,rt=rates[code];
-      const dpath=m.rings.map(r=>'M'+r.map(([lng,lat])=>tx({lat,lng}).map(v=>v.toFixed(1)).join(',')).join('L')+'Z').join('');
-      const fill=S.layer==='rate'&&rt!=null&&S.mode==='status'?`fill="var(--ok)" fill-opacity="${(0.06+rt*0.5).toFixed(2)}"`:`fill="var(--accent)" fill-opacity="${sel?.12:.03}"`;
-      s+=`<path data-poly="${esc(code||'')}" d="${dpath}" ${fill} stroke="var(--accent)" stroke-width="${sel?2.5:1}" stroke-opacity="${sel?1:.55}" stroke-linejoin="round" style="cursor:pointer"><title>สาขา${esc(m.name)} (${esc(code||'')})${rt!=null?` · อัตราเก็บได้ปี ${y}: ${Math.round(rt*100)}%`:''}</title></path>`;
-      const [x,yy]=tx({lng:m.c[0],lat:m.c[1]});
-      lbl+=`<text x="${x}" y="${yy}" text-anchor="middle" style="font-family:var(--f-display);font-size:${sel?13:11.5}px;font-weight:600;fill:var(--accent);opacity:${sel?1:.8};paint-order:stroke;stroke:var(--panel);stroke-width:3px;pointer-events:none">${esc(m.name)}${S.layer==='rate'&&rt!=null&&S.mode==='status'?` ${Math.round(rt*100)}%`:''}</text>`});
-    s+='<g id="lbls">'+lbl+'</g>';
-  } else LANDMARKS.forEach(([n,lat,lng])=>{const [x,y]=tx({lat,lng});s+=`<g opacity=".55"><path d="M${x-4} ${y}h8M${x} ${y-4}v8" stroke="var(--muted)"/><text x="${x+6}" y="${y+4}" style="font-family:var(--f-body);font-size:11px">${n}</text></g>`});
+    MWA.forEach(m=>{const code=N2C[m.name],sel=S.br===code,rt=rates[code],shade=S.layer==='rate'&&rt!=null&&S.mode==='status';
+      const poly=L.polygon(m.rings.map(r=>r.map(([lng,lat])=>[lat,lng])),{pane:'zones',color:acc,weight:sel?3:1.2,opacity:sel?1:.7,fillColor:shade?cv('var(--ok)'):acc,fillOpacity:shade?0.05+rt*0.35:(sel?.10:.02)});
+      poly.bindTooltip(`สาขา${esc(m.name)} (${esc(code||'')})${rt!=null?` · อัตราเก็บได้ปี ${y}: ${Math.round(rt*100)}%`:''}`,{sticky:true});
+      poly.on('click',()=>{if(!code)return;S.br=S.br===code?'all':code;$('fBr').value=S.br;render()});
+      zoneLayer.addLayer(poly);
+      zoneLayer.addLayer(L.tooltip({permanent:true,direction:'center',className:'zlbl'+(sel?' sel':''),interactive:false}).setLatLng([m.c[1],m.c[0]]).setContent(esc(m.name)+(shade?` ${Math.round(rt*100)}%`:'')));
+    })}
   const F=filtered().filter(d=>d.lat!=null);
-  const lblIdx=s.indexOf('<g id="lbls">');let labels='';if(lblIdx>=0){labels=s.slice(lblIdx);s=s.slice(0,lblIdx)}
+  const dot=(d,o,tip)=>{const mk=L.circleMarker([d.lat,d.lng],Object.assign({color:panel,weight:1.5,fillOpacity:.95,bubblingMouseEvents:false},o));mk.bindTooltip(tip);mk.on('click',()=>selectPt(d.i,false));dotLayer.addLayer(mk)};
   if(S.mode==='route'){const R=routeData();
-    const others=F.filter(d=>!R.set.has(d.i));
-    others.forEach(d=>{const [x,y]=tx(d);s+=`<circle cx="${x}" cy="${y}" r="3" fill="var(--off)" opacity=".35"/>`});
-    if(R.path.length){s+=`<polyline points="${R.path.map(d=>tx(d).join(',')).join(' ')}" fill="none" stroke="var(--route)" stroke-width="2.5" stroke-linejoin="round" opacity=".85"/>`;
-      R.path.forEach((d,n)=>{const [x,y]=tx(d);s+=`<g data-i="${d.i}" style="cursor:pointer"><circle cx="${x}" cy="${y}" r="10" fill="${COL[d.st[S.year]]||'var(--none)'}" stroke="var(--panel)" stroke-width="2"/><text x="${x}" y="${y+3.5}" text-anchor="middle" style="fill:#fff;font-size:10px;pointer-events:none">${n+1}</text><title>${n+1}. ${esc(d.name)} – ${esc(d.spot)}</title></g>`})}
-  } else if(S.mode==='quality'){const y=S.year;
-    const P=F.map(d=>({d,q:ptQ(d,y)}));const rank=q=>q?5-QORD.indexOf(q):0;
-    P.sort((a,b)=>rank(a.q)-rank(b.q)).forEach(({d,q})=>{const [x,yy]=tx(d);
-      if(q)s+=`<circle data-i="${d.i}" cx="${x}" cy="${yy}" r="6.5" fill="${QC[q]}" stroke="var(--panel)" stroke-width="1.5" style="cursor:pointer"><title>${esc(d.id)} ${esc(d.name)} – ${QL[q]} (ปีงบ ${y})</title></circle>`;
-      else if(d.st[y]==='เก็บ')s+=`<circle data-i="${d.i}" cx="${x}" cy="${yy}" r="5" fill="var(--panel)" stroke="var(--muted)" stroke-width="1.8" style="cursor:pointer"><title>${esc(d.id)} ${esc(d.name)} – ลงว่าเก็บ แต่ยังไม่มีผลตรวจปีงบ ${y}</title></circle>`;
-      else s+=`<circle data-i="${d.i}" cx="${x}" cy="${yy}" r="2.5" fill="var(--off)" opacity=".35" style="cursor:pointer"><title>${esc(d.id)} ${esc(d.name)} – ไม่มีผลตรวจปีงบ ${y}</title></circle>`});
+    F.filter(d=>!R.set.has(d.i)).forEach(d=>dot(d,{radius:3,fillColor:cv('var(--off)'),fillOpacity:.4,weight:0},`${esc(d.id)} ${esc(d.name)}`));
+    if(R.path.length){dotLayer.addLayer(L.polyline(R.path.map(d=>[d.lat,d.lng]),{color:cv('var(--route)'),weight:3.5,opacity:.85}));
+      R.path.forEach((d,n)=>{const mk=L.marker([d.lat,d.lng],{icon:L.divIcon({className:'stopnum',html:`<span style="background:${cv(COL[d.st[y]]||'var(--none)')}">${n+1}</span>`,iconSize:[22,22],iconAnchor:[11,11]})});
+        mk.bindTooltip(`${n+1}. ${esc(d.name)} – ${esc(d.spot||'')}`);mk.on('click',()=>selectPt(d.i,false));dotLayer.addLayer(mk)})}
+  } else if(S.mode==='quality'){const rank=q=>q?5-QORD.indexOf(q):0;
+    F.map(d=>({d,q:ptQ(d,y)})).sort((a,b)=>rank(a.q)-rank(b.q)).forEach(({d,q})=>{
+      if(q)dot(d,{radius:7,fillColor:cv(QC[q])},`${esc(d.id)} ${esc(d.name)} – ${QL[q]} (ปีงบ ${y})`);
+      else if(d.st[y]==='เก็บ')dot(d,{radius:5,fillColor:panel,color:cv('var(--muted)'),weight:2,fillOpacity:1},`${esc(d.id)} ${esc(d.name)} – ลงว่าเก็บ แต่ยังไม่มีผลตรวจปีงบ ${y}`);
+      else dot(d,{radius:3,fillColor:cv('var(--off)'),fillOpacity:.45,weight:0},`${esc(d.id)} ${esc(d.name)} – ไม่มีผลตรวจปีงบ ${y}`)});
   } else {
     const order={'ยกเลิก':0,'none':1,'เสีย':2,'เก็บ':3};
-    F.slice().sort((a,b)=>order[a.st[S.year]||'none']-order[b.st[S.year]||'none']).forEach(d=>{const [x,y]=tx(d),v=d.st[S.year];
-      s+=`<circle data-i="${d.i}" cx="${x}" cy="${y}" r="${v==='ยกเลิก'?4:5.5}" fill="${COL[v]||'var(--none)'}" stroke="var(--panel)" stroke-width="1.2" opacity="${v==='ยกเลิก'?.6:.95}" style="cursor:pointer"><title>${esc(d.id)} ${esc(d.name)} – ${v||'ไม่มีในรายการปีนี้'}</title></circle>`});
+    F.slice().sort((a,b)=>order[a.st[y]||'none']-order[b.st[y]||'none']).forEach(d=>{const v=d.st[y];
+      dot(d,{radius:v==='ยกเลิก'?4:6,fillColor:cv(COL[v]||'var(--none)'),fillOpacity:v==='ยกเลิก'?.6:.95},`${esc(d.id)} ${esc(d.name)} – ${v||'ไม่มีในรายการปีนี้'}`)});
   }
-  if(S.sel!=null){const d=D[S.sel];if(d.lat!=null){const [x,y]=tx(d);s+=`<circle cx="${x}" cy="${y}" r="14" fill="none" stroke="var(--ink)" stroke-width="2"/>`}}
-  svg.innerHTML=s+labels.replace('<g id="lbls">','<g>');
+  if(S.sel!=null){const d=D[S.sel];if(d.lat!=null)dotLayer.addLayer(L.circleMarker([d.lat,d.lng],{radius:15,fill:false,color:cv('var(--ink)'),weight:2.5,interactive:false}))}
 }
-// pan/zoom
-let drag=null,moved=false;
-svg.addEventListener('pointerdown',e=>{drag={x:e.clientX,y:e.clientY,vx:view.x,vy:view.y};moved=false;svg.setPointerCapture(e.pointerId);svg.classList.add('drag')});
-svg.addEventListener('pointermove',e=>{if(!drag)return;const dx=e.clientX-drag.x,dy=e.clientY-drag.y;if(Math.abs(dx)+Math.abs(dy)>3)moved=true;view.x=drag.vx+dx;view.y=drag.vy+dy;if(moved)drawMap()});
-svg.addEventListener('pointerup',e=>{svg.classList.remove('drag');const wasDrag=moved;drag=null;if(wasDrag)return;
-  const el=document.elementFromPoint(e.clientX,e.clientY);const g=el&&el.closest('[data-i]');if(g){selectPt(+g.dataset.i,false);return}
-  const pg=el&&el.closest('[data-poly]');if(pg&&pg.dataset.poly){S.br=S.br===pg.dataset.poly?'all':pg.dataset.poly;$('fBr').value=S.br;render()}});
 $('layer').onchange=e=>{S.layer=e.target.value;drawMap()};
-function zoomAt(f,cx,cy){const r=svg.getBoundingClientRect();cx??=r.width/2;cy??=r.height/2;const nk=Math.min(Math.max(view.k*f,base.k*.5),base.k*40);f=nk/view.k;view.x=cx-(cx-view.x)*f;view.y=cy-(cy-view.y)*f;view.k=nk;drawMap()}
-svg.addEventListener('wheel',e=>{e.preventDefault();const r=svg.getBoundingClientRect();zoomAt(e.deltaY<0?1.25:0.8,e.clientX-r.left,e.clientY-r.top)},{passive:false});
-$('zin').onclick=()=>zoomAt(1.5);$('zout').onclick=()=>zoomAt(1/1.5);$('zfit').onclick=()=>fit(S.mode==='route'?routeData().path:(S.br==='all'&&S.who==='all'?null:filtered().filter(d=>d.lat!=null)));
-window.addEventListener('resize',()=>{const v=view;base=null;fit();});
-
+$('zin').onclick=()=>map.zoomIn();$('zout').onclick=()=>map.zoomOut();
+$('zfit').onclick=()=>fit(S.mode==='route'?routeData().path:(S.br==='all'&&S.who==='all'?null:filtered()));
+window.addEventListener('resize',()=>map.invalidateSize());
+try{matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>drawMap())}catch(e){}
 function selectPt(i,center){S.sel=i;const d=D[i];
-  if(center&&d.lat!=null){const r=svg.getBoundingClientRect();const [a,b]=px(d);view.k=Math.max(view.k,base.k*4);view.x=r.width/2-a*view.k;view.y=r.height/2-b*view.k;
-    svg.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion:reduce)').matches?'auto':'smooth',block:'center'})}
+  if(center&&d.lat!=null){$('map').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion:reduce)').matches?'auto':'smooth',block:'center'});map.setView([d.lat,d.lng],Math.max(map.getZoom(),15))}
   drawMap();side()}
 
 /* ---------- routing ---------- */
@@ -555,7 +542,7 @@ function side(){
 if(!whos.includes(S.rWho))S.rWho=whos[0];
 $('nwho').textContent=whos.filter(w=>w!=='ไม่ระบุ').length;
 render();
-requestAnimationFrame(()=>{base=null;fit()});
+requestAnimationFrame(()=>{map.invalidateSize();fit()});
 }
 load();
 </script>
