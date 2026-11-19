@@ -618,7 +618,7 @@ function histHTML(d){
   const v=s=>s?String(s).replace('น้อยกว่า ','<').replace('น้อยกว่า','<'):'–';
   const cell=(s,x)=>`<td class="n ${x?'x':''}">${esc(v(s))}</td>`;
   const bug=(s)=>`<td class="${s==='พบ'?'x':''}">${s?esc(s):'<span class="note">ไม่ได้ตรวจ</span>'}</td>`;
-  return `<div class="panel">${head}<div class="hist-w"><div class="hist-chart">${clChart(d.samples,640,140)}</div>
+  return `<div class="panel">${head}<div class="hist-w">
   <div class="tbl"><table class="wide"><tr><th>วันที่</th><th class="n">ปีงบ</th><th>รหัสตัวอย่าง</th><th class="n">คลอรีน (mg/L)</th><th class="n">ความขุ่น (NTU)</th><th class="n">สี</th><th class="n">pH</th><th class="n">ความนำไฟฟ้า</th><th class="n">สารละลาย (mg/L)</th><th class="n">เหล็ก (mg/L)</th><th>อีโคไล</th><th>โคลิฟอร์ม</th><th>ผล</th></tr>
   ${d.samples.map(s=>`<tr><td>${thd(s.dt)}</td><td class="n">${esc(s.fy||'–')}</td><td class="mono">${esc(s.c||'–')}</td>${cell(s.cl,s.low)}${cell(s.tu,s.ex.tu)}${cell(s.col,s.ex.col)}${cell(s.ph,s.ex.ph)}${cell(s.ec,false)}${cell(s.tds,s.ex.tds)}${cell(s.fe,s.ex.fe)}${bug(s.eco)}${bug(s.coli)}<td><span class="pill" style="background:${QC[s.cat]}">${QL[s.cat]}</span></td></tr>`).join('')}</table></div></div>
   <p class="note" style="margin:8px 0 0">ตัวเลขสีแดง = เกินเกณฑ์ · เกณฑ์: คลอรีน ≥ 0.2 · ขุ่น ≤ 4 · สี ≤ 15 · pH 6.5–8.5 · สารละลาย ≤ 600 · เหล็ก ≤ 0.3 · ไม่พบเชื้อ</p></div>`}
