@@ -192,6 +192,14 @@ details.fold[open] .fold-t::before{content:"ย่อ"}
 .fold-t::after{content:"";width:7px;height:7px;border-right:1.6px solid currentColor;border-bottom:1.6px solid currentColor;transform:translateY(-2px) rotate(45deg);transition:transform .15s}
 details.fold[open] .fold-t::after{transform:translateY(2px) rotate(-135deg)}
 details.fold>summary:hover .fold-t{background:#d3e5fb}
+.det-h{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.det-h h2{margin:0 0 12px}
+.xbtn{flex:none;width:30px;height:30px;padding:0;border-radius:50%;font-size:15px;line-height:1;color:var(--muted)}
+.xbtn:hover{color:var(--ink)}
+.hist-w{display:grid;grid-template-columns:minmax(0,1fr);gap:8px}
+.hist-chart{max-width:640px}
+table.wide{font-size:14px} table.wide th,table.wide td{padding:8px 12px}
+table.wide th{background:var(--soft);position:sticky;top:0}
 .foot{color:var(--muted);font-size:13px;text-align:center;margin:8px 0 0}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
 </style>
@@ -244,6 +252,7 @@ details.fold>summary:hover .fold-t{background:#d3e5fb}
       </div>
       <div class="side" id="side"></div>
     </div>
+    <div id="hist" style="margin-top:16px" hidden></div>
   </section>
 
   <section id="sum" style="display:grid;gap:20px">
@@ -357,7 +366,7 @@ const BRN={'สสข.':'บางเขน','สสช.':'ประชาชื
 const N2C=Object.fromEntries(Object.entries(BRN).map(([c,n])=>[n,c]));
 const brLabel=b=>BRN[b]?`${b} ${BRN[b]}`:b;
 D.forEach((d,i)=>{d.i=i;d.who=d.who||'ไม่ระบุ';d.br=d.br||'ไม่ระบุ';d.id=d.id||'(ไม่มีรหัส)';d.name=d.name||'(ไม่มีชื่อสถานที่)'});
-const S={layer:'rate',year:YEARS[YEARS.length-1],who:'all',br:'all',mode:'status',sel:null,rWho:'สินาท',rSt:{'เก็บ':true,'ยังไม่เก็บ':true,'เสีย':false,'ยกเลิก':false},rStart:'auto'};
+const S={layer:'rate',year:YEARS[YEARS.length-1],who:'all',br:'all',mode:'status',sel:null,rWho:'สินาท',rSt:{'เก็บ':true,'ยังไม่เก็บ':true},rStart:'auto'};
 const $=id=>document.getElementById(id);
 const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const cnt=(arr,y)=>{const c={'เก็บ':0,'ยังไม่เก็บ':0,'เสีย':0,'ยกเลิก':0,none:0};arr.forEach(d=>{const v=d.st[y];v?c[v]++:c.none++});return c};
@@ -533,7 +542,7 @@ function drawMap(){
       zoneLayer.addLayer(poly);
       zoneLayer.addLayer(L.tooltip({permanent:true,direction:'center',className:'zlbl'+(sel?' sel':''),interactive:false}).setLatLng([m.c[1],m.c[0]]).setContent(esc(m.name)+(shade?` ${Math.round(rt*100)}%`:'')));
     })}
-  const F=filtered().filter(d=>d.lat!=null);
+  const F=filtered().filter(d=>d.lat!=null&&usable(d.st[y]));
   const dot=(d,o,tip)=>{const mk=L.circleMarker([d.lat,d.lng],Object.assign({color:panel,weight:1.5,fillOpacity:.95,bubblingMouseEvents:false},o));mk.bindTooltip(tip);mk.on('click',()=>selectPt(d.i,false));dotLayer.addLayer(mk)};
   if(S.mode==='route'){const R=routeData();
     F.filter(d=>!R.set.has(d.i)).forEach(d=>dot(d,{radius:3,fillColor:cv('var(--off)'),fillOpacity:.4,weight:0},`${esc(d.id)} ${esc(d.name)}`));
@@ -544,7 +553,7 @@ function drawMap(){
     F.map(d=>({d,q:ptQ(d,y)})).sort((a,b)=>rank(a.q)-rank(b.q)).forEach(({d,q})=>{
       if(q)dot(d,{radius:7,fillColor:cv(QC[q])},`${esc(d.id)} ${esc(d.name)} – ${QL[q]} (ปีงบ ${y})`);
       else if(d.st[y]==='เก็บ')dot(d,{radius:5,fillColor:panel,color:cv('var(--muted)'),weight:2,fillOpacity:1},`${esc(d.id)} ${esc(d.name)} – ลงว่าเก็บ แต่ยังไม่มีผลตรวจปีงบ ${y}`);
-      else dot(d,{radius:3,fillColor:cv('var(--off)'),fillOpacity:.45,weight:0},`${esc(d.id)} ${esc(d.name)} – ไม่มีผลตรวจปีงบ ${y}`)});
+      else dot(d,{radius:4,fillColor:cv('var(--off)'),fillOpacity:.6,weight:0},`${esc(d.id)} ${esc(d.name)} – ยังไม่เก็บ ยังไม่มีผลตรวจปีงบ ${y}`)});
   } else {
     const order={'ยกเลิก':0,'none':1,'เสีย':2,'เก็บ':3,'ยังไม่เก็บ':4};
     F.slice().sort((a,b)=>order[a.st[y]||'none']-order[b.st[y]||'none']).forEach(d=>{const v=d.st[y];
@@ -556,9 +565,15 @@ $('layer').onchange=e=>{S.layer=e.target.value;drawMap()};
 $('zin').onclick=()=>map.zoomIn();$('zout').onclick=()=>map.zoomOut();
 $('zfit').onclick=()=>fit(S.mode==='route'?routeData().path:(S.br==='all'&&S.who==='all'?null:filtered()));
 window.addEventListener('resize',()=>map.invalidateSize());
-function selectPt(i,center){S.sel=i;const d=D[i];
+function selectPt(i,center){if(!center&&S.sel===i){clearSel();return}S.sel=i;const d=D[i];
   if(center&&d.lat!=null){$('map').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion:reduce)').matches?'auto':'smooth',block:'center'});map.setView([d.lat,d.lng],Math.max(map.getZoom(),15))}
   drawMap();side()}
+function clearSel(){if(S.sel==null)return;S.sel=null;drawMap();side()}
+map.on('click',clearSel);   // คลิกพื้นที่ว่างบนแผนที่ = ยกเลิกเลือก (จุดไม่ส่งต่อ event)
+document.addEventListener('click',e=>{if(S.sel==null)return;
+  const keep='#map,#side,#hist,.top,[data-i],a,button,select,input,label,summary,.mapctl';
+  if(e.composedPath().some(n=>n.matches&&n.matches(keep)))return;clearSel()});   // ใช้ composedPath เพราะจุดที่คลิกถูกวาดใหม่ไปแล้ว
+document.addEventListener('keydown',e=>{if(e.key==='Escape')clearSel()});
 
 /* ---------- routing ---------- */
 const hav=(a,b)=>{const R=6371,t=Math.PI/180,dl=(b.lat-a.lat)*t,dg=(b.lng-a.lng)*t,x=Math.sin(dl/2)**2+Math.cos(a.lat*t)*Math.cos(b.lat*t)*Math.sin(dg/2)**2;return 2*R*Math.asin(Math.sqrt(x))};
@@ -583,41 +598,48 @@ function routeData(){
 function gmLinks(path){const out=[];for(let s=0;s<path.length-1;s+=9){const seg=path.slice(s,s+10);out.push({from:s+1,to:s+seg.length,url:'https://www.google.com/maps/dir/'+seg.map(d=>d.lat.toFixed(6)+','+d.lng.toFixed(6)).join('/')})}return out}
 
 /* ---------- side panel ---------- */
-function detailHTML(){if(S.sel==null)return `<div class="panel"><h2>รายละเอียดจุด</h2><p class="note" style="margin:0">คลิกจุดบนแผนที่ หรือคลิกรหัสในรายการ เพื่อดูประวัติสถานะและผลตรวจของจุดนั้น</p></div>`;
+function detailHTML(){if(S.sel==null)return `<div class="panel"><h2>รายละเอียดจุด</h2><p class="note" style="margin:0">คลิกจุดบนแผนที่ หรือคลิกรหัสในรายการ เพื่อดูประวัติสถานะและผลตรวจของจุดนั้น คลิกจุดเดิมซ้ำ คลิกพื้นที่ว่าง หรือกด Esc เพื่อยกเลิกการเลือก</p></div>`;
   const d=D[S.sel];
-  return `<div class="panel"><h2>${esc(d.name)}</h2><dl class="kv"><dt>รหัส</dt><dd class="mono">${esc(d.id)}</dd><dt>จุดเก็บ</dt><dd>${esc(d.spot||'–')}</dd><dt>ถนน</dt><dd>${esc(d.road||'–')}</dd><dt>สาขา</dt><dd>${esc(brLabel(d.br))}</dd><dt>เขต กปน.</dt><dd>${d.mwa?`อยู่ในเขตสาขา${esc(d.mwa)}`:(d.lat!=null?'อยู่นอกเขตบริการ':'–')}${d.mwa&&BRN[d.br]&&BRN[d.br]!==d.mwa?' <span class="pill p-none">ไม่ตรงกับสาขาในทะเบียน</span>':''}</dd><dt>ผู้เก็บ</dt><dd>${esc(d.who)}</dd>
+  return `<div class="panel"><div class="det-h"><h2>${esc(d.name)}</h2><button type="button" class="xbtn" id="unsel" aria-label="ยกเลิกการเลือกจุด" title="ยกเลิกการเลือก (Esc)">✕</button></div><dl class="kv"><dt>รหัส</dt><dd class="mono">${esc(d.id)}</dd><dt>จุดเก็บ</dt><dd>${esc(d.spot||'–')}</dd><dt>ถนน</dt><dd>${esc(d.road||'–')}</dd><dt>สาขา</dt><dd>${esc(brLabel(d.br))}</dd><dt>เขต กปน.</dt><dd>${d.mwa?`อยู่ในเขตสาขา${esc(d.mwa)}`:(d.lat!=null?'อยู่นอกเขตบริการ':'–')}${d.mwa&&BRN[d.br]&&BRN[d.br]!==d.mwa?' <span class="pill p-none">ไม่ตรงกับสาขาในทะเบียน</span>':''}</dd><dt>ผู้เก็บ</dt><dd>${esc(d.who)}</dd>
   <dt>สถานะ</dt><dd class="yrs">${YEARS.map(y=>`<span class="pill p-${d.st[y]||'none'}" title="ปี ${y}">${y}: ${d.st[y]||'–'}</span>`).join('')}</dd>
   <dt>พิกัด</dt><dd class="mono">${d.lat!=null?`${d.lat.toFixed(5)}, ${d.lng.toFixed(5)}`:'ไม่มี'}</dd></dl>
-  ${d.lat!=null?`<p style="margin:12px 0 0"><a href="https://www.google.com/maps/search/?api=1&query=${d.lat},${d.lng}" target="_blank" rel="noopener">เปิดใน Google Maps ↗</a></p>`:''}</div>${histHTML(d)}`}
-function clChart(sm){const pts=sm.filter(s=>s.dt&&s.n.cl!=null).slice().reverse();if(pts.length<2)return '';
-  const W=300,H=120,L=30,R=8,T=10,B=20,t=s=>new Date(s.dt).getTime(),t0=t(pts[0]),t1=t(pts[pts.length-1]),mx=Math.max(1,...pts.map(s=>s.n.cl));
+  ${d.lat!=null?`<p style="margin:12px 0 0"><a href="https://www.google.com/maps/search/?api=1&query=${d.lat},${d.lng}" target="_blank" rel="noopener">เปิดใน Google Maps ↗</a></p>`:''}</div>`}
+function clChart(sm,W=300,H=120){const pts=sm.filter(s=>s.dt&&s.n.cl!=null).slice().reverse();if(pts.length<2)return '';
+  const L=30,R=8,T=10,B=20,t=s=>new Date(s.dt).getTime(),t0=t(pts[0]),t1=t(pts[pts.length-1]),mx=Math.max(1,...pts.map(s=>s.n.cl));
   const sx=v=>L+(t1>t0?(v-t0)/(t1-t0):.5)*(W-L-R),sy=v=>H-B-(v/mx)*(H-B-T);
   let s=`<line x1="${L}" x2="${W-R}" y1="${sy(0)}" y2="${sy(0)}" stroke="var(--line)"/><line x1="${L}" x2="${W-R}" y1="${sy(.2)}" y2="${sy(.2)}" stroke="var(--amber)" stroke-dasharray="4 3"/><text x="${L-4}" y="${sy(.2)+3}" text-anchor="end" style="font-size:9px">0.2</text><text x="${L-4}" y="${sy(mx)+8}" text-anchor="end" style="font-size:9px">${mx.toFixed(1)}</text>`;
   s+=`<polyline points="${pts.map(p=>sx(t(p))+','+sy(p.n.cl)).join(' ')}" fill="none" stroke="var(--accent)" stroke-width="1.4"/>`;
   pts.forEach(p=>s+=`<circle cx="${sx(t(p))}" cy="${sy(p.n.cl)}" r="3.5" fill="${QC[p.cat]}"><title>${thd(p.dt)} คลอรีน ${p.cl}</title></circle>`);
   s+=`<text x="${L}" y="${H-5}" style="font-size:9px">${thd(pts[0].dt)}</text><text x="${W-R}" y="${H-5}" text-anchor="end" style="font-size:9px">${thd(pts[pts.length-1].dt)}</text>`;
   return `<p class="note" style="margin:8px 0 2px">คลอรีนอิสระ (mg/L) เส้นประคือเกณฑ์ 0.2</p><svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="กราฟคลอรีนย้อนหลัง">${s}</svg>`}
-function histHTML(d){if(!d.samples.length)return `<div class="panel"><h2>ผลตรวจคุณภาพน้ำ</h2><p class="note" style="margin:0">ยังไม่มีผลตรวจของจุดนี้ในชีต data</p></div>`;
-  const cell=(v,x)=>`<td class="n ${x?'x':''}">${esc(v?String(v).replace('น้อยกว่า ','<').replace('น้อยกว่า','<'):'–')}</td>`;
-  return `<div class="panel"><h2>ผลตรวจคุณภาพน้ำ <span class="note">${d.samples.length} ครั้ง</span></h2>${clChart(d.samples)}
-  <div class="tbl"><table class="hist"><tr><th>วันที่</th><th class="n">ปีงบ</th><th class="n">คลอรีน</th><th class="n">ขุ่น</th><th class="n">สี</th><th class="n">pH</th><th class="n">สารละลาย</th><th>เชื้อ</th></tr>
-  ${d.samples.map(s=>`<tr title="${esc(s.c)}"><td class="mono">${thd(s.dt)}</td><td class="n">${esc(s.fy||'–')}</td>${cell(s.cl,s.low)}${cell(s.tu,s.ex.tu)}${cell(s.col,s.ex.col)}${cell(s.ph,s.ex.ph)}${cell(s.tds,s.ex.tds)}<td class="${s.micro?'x':''}">${s.micro?[s.eco==='พบ'?'อีโคไล':'',s.coli==='พบ'?'โคลิฟอร์ม':''].filter(Boolean).join(', '):(s.coli?'ไม่พบ':'ไม่พบ<span class="note">*</span>')}</td></tr>`).join('')}</table></div>
-  <p class="note" style="margin:6px 0 0">* ตรวจเฉพาะอีโคไล ไม่ได้ตรวจโคลิฟอร์ม</p></div>`}
-function side(){
-  if(S.mode==='status'){$('side').innerHTML=`<div class="panel"><div class="legend"><span><i style="background:var(--ok)"></i>เก็บ</span><span><i style="background:var(--accent)"></i>ยังไม่เก็บ</span><span><i style="background:var(--bad)"></i>เสีย</span><span><i style="background:var(--off)"></i>ยกเลิก</span><span><i style="background:var(--none)"></i>ไม่มีในรายการปีนี้</span></div><p class="note" style="margin:8px 0 0">แสดง ${filtered().filter(d=>d.lat!=null).length} จุดตามตัวกรอง สถานะของปี ${S.year}</p></div>`+detailHTML();return}
-  if(S.mode==='quality'){const y=S.year,F=filtered(),cnts={};QORD.forEach(k=>cnts[k]=0);let gap=0,none=0;
+function histHTML(d){
+  const head=`<div class="det-h"><h2>ผลตรวจคุณภาพน้ำ · ${esc(d.name)} <span class="note">${esc(d.id)}${d.spot?' · '+esc(d.spot):''} · ${d.samples.length} ครั้ง</span></h2><button type="button" class="xbtn" data-unsel aria-label="ยกเลิกการเลือกจุด">✕</button></div>`;
+  if(!d.samples.length)return `<div class="panel">${head}<p class="note" style="margin:0">ยังไม่มีผลตรวจของจุดนี้ในชีต data</p></div>`;
+  const v=s=>s?String(s).replace('น้อยกว่า ','<').replace('น้อยกว่า','<'):'–';
+  const cell=(s,x)=>`<td class="n ${x?'x':''}">${esc(v(s))}</td>`;
+  const bug=(s)=>`<td class="${s==='พบ'?'x':''}">${s?esc(s):'<span class="note">ไม่ได้ตรวจ</span>'}</td>`;
+  return `<div class="panel">${head}<div class="hist-w"><div class="hist-chart">${clChart(d.samples,640,140)}</div>
+  <div class="tbl"><table class="wide"><tr><th>วันที่</th><th class="n">ปีงบ</th><th>รหัสตัวอย่าง</th><th class="n">คลอรีน (mg/L)</th><th class="n">ความขุ่น (NTU)</th><th class="n">สี</th><th class="n">pH</th><th class="n">ความนำไฟฟ้า</th><th class="n">สารละลาย (mg/L)</th><th class="n">เหล็ก (mg/L)</th><th>อีโคไล</th><th>โคลิฟอร์ม</th><th>ผล</th></tr>
+  ${d.samples.map(s=>`<tr><td>${thd(s.dt)}</td><td class="n">${esc(s.fy||'–')}</td><td class="mono">${esc(s.c||'–')}</td>${cell(s.cl,s.low)}${cell(s.tu,s.ex.tu)}${cell(s.col,s.ex.col)}${cell(s.ph,s.ex.ph)}${cell(s.ec,false)}${cell(s.tds,s.ex.tds)}${cell(s.fe,s.ex.fe)}${bug(s.eco)}${bug(s.coli)}<td><span class="pill" style="background:${QC[s.cat]}">${QL[s.cat]}</span></td></tr>`).join('')}</table></div></div>
+  <p class="note" style="margin:8px 0 0">ตัวเลขสีแดง = เกินเกณฑ์ · เกณฑ์: คลอรีน ≥ 0.2 · ขุ่น ≤ 4 · สี ≤ 15 · pH 6.5–8.5 · สารละลาย ≤ 600 · เหล็ก ≤ 0.3 · ไม่พบเชื้อ</p></div>`}
+function side(){side0();
+  const h=$('hist');if(S.sel==null){h.hidden=true;h.innerHTML=''}else{h.hidden=false;h.innerHTML=histHTML(D[S.sel])}
+  document.querySelectorAll('#unsel,[data-unsel]').forEach(b=>b.onclick=clearSel)}
+function side0(){
+  if(S.mode==='status'){$('side').innerHTML=`<div class="panel"><div class="legend"><span><i style="background:var(--ok)"></i>เก็บแล้ว</span><span><i style="background:var(--accent)"></i>ยังไม่เก็บ</span></div><p class="note" style="margin:8px 0 0">แสดงเฉพาะแท่นที่ยังใช้ได้ ${filtered().filter(d=>d.lat!=null&&usable(d.st[S.year])).length} จุดตามตัวกรอง ปี ${S.year} (ไม่แสดงแท่นเสีย ยกเลิก หรือไม่มีในรายการ)</p></div>`+detailHTML();return}
+  if(S.mode==='quality'){const y=S.year,F=filtered().filter(d=>usable(d.st[y])),cnts={};QORD.forEach(k=>cnts[k]=0);let gap=0,none=0;
     F.forEach(d=>{const q=ptQ(d,y);if(q)cnts[q]++;else if(d.st[y]==='เก็บ')gap++;else none++});
-    $('side').innerHTML=`<div class="panel"><h2>คุณภาพน้ำ ปีงบ ${y}</h2><p class="note" style="margin:0 0 10px">สีของจุดคือผลที่แย่ที่สุดของจุดนั้นในปีงบ ${y}</p>
+    $('side').innerHTML=`<div class="panel"><h2>คุณภาพน้ำ ปีงบ ${y}</h2><p class="note" style="margin:0 0 10px">สีของจุดคือผลที่แย่ที่สุดของจุดนั้นในปีงบ ${y} · แสดงเฉพาะแท่นที่ยังใช้ได้</p>
       <ul class="attn">${QORD.map(k=>`<li><i style="background:${QC[k]}"></i><span>${QL[k]} <b class="mono">${cnts[k]}</b> จุด</span></li>`).join('')}
       <li><i style="background:var(--panel);border:1.5px solid var(--muted);box-sizing:border-box"></i><span>ลงว่าเก็บ แต่ยังไม่มีผลตรวจ <b class="mono">${gap}</b> จุด</span></li>
-      <li><i style="background:var(--off);opacity:.4"></i><span>ไม่มีผลตรวจปีงบนี้ <b class="mono">${none}</b> จุด</span></li></ul></div>`+detailHTML();return}
+      <li><i style="background:var(--off);opacity:.4"></i><span>ยังไม่เก็บ ยังไม่มีผลตรวจ <b class="mono">${none}</b> จุด</span></li></ul></div>`+detailHTML();return}
   const R=routeData();
   const startOpts=R.path.slice().sort((a,b)=>a.name.localeCompare(b.name,'th')).map(d=>`<option value="${d.i}" ${S.rStart==String(d.i)?'selected':''}>${esc(d.name)} – ${esc(d.spot||'')}</option>`).join('');
   $('side').innerHTML=`<div class="panel">
    <h2>วางเส้นทางเก็บ ปี ${S.year}</h2>
    <div style="display:grid;gap:10px">
     <label class="note" for="rWho" style="display:grid;gap:4px">ผู้เก็บ <select id="rWho">${whos.map(w=>`<option ${w===S.rWho?'selected':''}>${esc(w)}</option>`).join('')}</select></label>
-    <div class="checks">${ST.map(k=>`<label><input type="checkbox" id="rs-${k}" data-k="${k}" ${S.rSt[k]?'checked':''}> จุด${k}</label>`).join('')}</div>
+    <div class="checks">${ST.filter(usable).map(k=>`<label><input type="checkbox" id="rs-${k}" data-k="${k}" ${S.rSt[k]?'checked':''}> จุด${k}</label>`).join('')}</div>
     <label class="note" for="rStart" style="display:grid;gap:4px">เริ่มจาก <select id="rStart" style="max-width:100%"><option value="auto">เลือกให้อัตโนมัติ (สั้นที่สุด)</option>${startOpts}</select></label>
    </div>
    <p style="margin:14px 0 4px"><b class="mono" style="font-family:var(--f-display);font-size:24px">${R.path.length}</b> จุด ระยะเส้นตรงรวม <b class="mono">${R.total.toFixed(1)}</b> กม.</p>
